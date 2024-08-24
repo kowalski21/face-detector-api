@@ -7,6 +7,7 @@ from deepface.modules import verification
 from fastapi import FastAPI, File, UploadFile, HTTPException, status
 import shutil
 from tempfile import NamedTemporaryFile
+from fastapi.middleware.cors import CORSMiddleware
 
 
 def save_file_to_temp(upload_file: UploadFile) -> str:
@@ -28,8 +29,18 @@ def remove_file(file_path: str):
 
 app = FastAPI()
 
+# Add CORS middleware with more specific configuration
+origins = ["*"]
 
-@app.get("/")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/home")
 def home_route():
     return {"home": "welcome"}
 
